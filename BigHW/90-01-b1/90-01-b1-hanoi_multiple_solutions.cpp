@@ -42,10 +42,10 @@ static int delay_mod;
 /***************************************************************************
   函数名称：Stack_push
   功    能：把编号为 num 的盘子压入 id 号柱子的栈顶
-  输入参数：int id ：柱号
-		    int num：盘子编号
+  输入参数：int id ：柱号（0、1、2 分别对应 A、B、C 柱）
+		   int num：盘子编号（1 最小，MAX_LAYER 最大）
   返 回 值：无
-  说    明：
+  说    明：用数组模拟三个柱子的栈，出栈入栈都在栈顶进行
 ***************************************************************************/
 void Stack_push(int id, int num)
 {
@@ -56,9 +56,9 @@ void Stack_push(int id, int num)
 /***************************************************************************
   函数名称：Stack_top
   功    能：取得 id 号柱子栈顶的盘子编号，不改变栈的内容
-  输入参数：int id：柱号
-  返 回 值：栈顶盘子编号；柱子为空时返回 MAX_LAYER+1
-  说    明：
+  输入参数：int id：柱号（0、1、2 分别对应 A、B、C 柱）
+  返 回 值：栈顶盘子编号；柱子为空时返回 MAX_LAYER+1（比任何盘子都"大"，便于比较）
+  说    明：空柱返回一个大数，使"大盘压小盘"的判断对空柱也成立
 ***************************************************************************/
 int Stack_top(int id)
 {
@@ -71,9 +71,9 @@ int Stack_top(int id)
 /***************************************************************************
   函数名称：Stack_pop
   功    能：弹出 id 号柱子栈顶的盘子
-  输入参数：int id：柱号
+  输入参数：int id：柱号（0、1、2 分别对应 A、B、C 柱）
   返 回 值：无
-  说    明：
+  说    明：柱子为空时不做任何操作
 ***************************************************************************/
 void Stack_pop(int id) 
 {
@@ -87,12 +87,12 @@ void Stack_pop(int id)
 
 /***************************************************************************
   函数名称：Screen_delay
-  功    能：按设定的速度延时；速度为0时改为等待用户按回车，实现单步演示
+  功    能：按用户设定的速度延时；速度为0时改为等待用户按回车，实现单步演示
   输入参数：无
   返 回 值：无
   说    明：延时值保存在静态全局变量 delay_mod 中，由 Run_hanoi 读入
 ***************************************************************************/
-void Screen_delay()
+void Screen_delay() //延时
 {
     if (!delay_mod) {
         while (true) {
@@ -109,13 +109,13 @@ void Screen_delay()
   函数名称：Screen_show_tower
   功    能：画出三个底盘和三个立柱，并在状态行显示本次移动的说明
   输入参数：int n   ：本次移动的盘子数，0 表示不需要显示说明
-		    char src：起始柱
-		    char dst：目标柱
-		    bool delay：是否延时
+		   char src：起始柱（'A'-'C'）
+		   char dst：目标柱（'A'-'C'）
+		   bool delay：是否在每画一个元素后延时，0 用于重画时加速
   返 回 值：无
-  说    明：
+  说    明：三个底盘、三个立柱的颜色都取自 HDC_COLOR 中的基座颜色
 ***************************************************************************/
-void Screen_show_tower(int n = 0, char src = '\0', char dst = '\0', bool delay = 1)
+void Screen_show_tower(int n = 0, char src = '\0', char dst = '\0', bool delay = 1) //画柱子
 {
     hdc_init(HDC_COLOR[0], RGB(0, 0, 0), 8 * 120, 16 * 30);
     hdc_cls();
@@ -154,11 +154,11 @@ void Screen_show_tower(int n = 0, char src = '\0', char dst = '\0', bool delay =
 /***************************************************************************
   函数名称：Screen_disk_init
   功    能：按当前各柱子的内容，把所有盘子画到立柱上
-  输入参数：bool delay：是否在每画一个盘子后延时
+  输入参数：bool delay：是否在每画一个盘子后延时，0 用于重画时加速
   返 回 值：无
-  说    明：
+  说    明：盘子的宽度为 (2*编号+1)*HDC_Base_Width，高度为 HDC_Base_High
 ***************************************************************************/
-void Screen_disk_init(bool delay = 1)
+void Screen_disk_init(bool delay = 1) //画盘子
 {
     const int underpan_width = 23 * HDC_Base_Width;
     for (int id = 0; id < 3; id++) {
@@ -183,15 +183,15 @@ void Screen_disk_init(bool delay = 1)
 
 /***************************************************************************
   函数名称：Screen_init
-  功    能：图形界面的初始化
+  功    能：图形界面的初始化：画底盘立柱，再把初始的各盘子画上去
   输入参数：int n ：盘子层数
-		    int src：起始柱的柱号
-		    int dst：目标柱的柱号
-		    bool is_initial：是否先清屏
+		   int src：起始柱的柱号（0-2）
+		   int dst：目标柱的柱号（0-2）
+		   bool is_initial：是否先清屏（菜单8/9已在字符区画了内容，所以要传0）
   返 回 值：无
-  说    明：
+  说    明：柱号加 'A' 得到显示的柱名
 ***************************************************************************/
-void Screen_init(int n, int src, int dst, bool is_initial = 1)
+void Screen_init(int n, int src, int dst, bool is_initial = 1) //图形界面的初始化
 {
     if (is_initial) {
         cct_cls();
@@ -203,14 +203,16 @@ void Screen_init(int n, int src, int dst, bool is_initial = 1)
 
 /***************************************************************************
   函数名称：Screen_move
-  功    能：单步图形移动
-  输入参数：int src ：起始柱的柱号
-		    int dst ：目标柱的柱号
-		    bool skip：是否跳过延时
+  功    能：把一个盘子从 src 柱单步移动到 dst 柱，逐像素重画形成动画
+  输入参数：int src ：起始柱的柱号（0-2）
+		   int dst ：目标柱的柱号（0-2）
+		   bool skip：非0且步数较多时不再延时，用于自动演示时加速
   返 回 值：无
-  说    明：
+  说    明：1、移动顺序为"先向上、再水平、最后向下"，与汉诺塔的物理规则一致
+		   2、每画新位置的盘子，同时用背景色擦除旧位置的盘子，并补画被擦掉的立柱
+		   3、柱子的栈内容由调用者在调用前弹栈、调用后压栈，本函数只负责显示
 ***************************************************************************/
-void Screen_move(int src, int dst, bool skip = 0)
+void Screen_move(int src, int dst, bool skip = 0) //单步图形移动
 {
     const int underpan_width = 23 * HDC_Base_Width;
     const int disk_height = HDC_Base_High;
@@ -300,12 +302,12 @@ void Screen_move(int src, int dst, bool skip = 0)
 
 /***************************************************************************
   函数名称：Screen_show_list
-  功    能：打印横向数组
+  功    能：在一行内打印三个柱子的横向数组内容（A:内容 B:内容 C:内容）
   输入参数：无
   返 回 值：无
-  说    明：
+  说    明：每个柱子固定打印 MAX_LAYER 个宽度为2的格子，空位打印空格，保证列对齐
 ***************************************************************************/
-void Screen_show_list() 
+void Screen_show_list() //打印横向数组
 {
     for (int id = 0; id < 3; id++) {
         cout << char('A' + id) << ":";
@@ -323,16 +325,16 @@ void Screen_show_list()
 
 /***************************************************************************
   函数名称：Screen_update
-  功    能：在(x,y)处更新数组可视化
-  输入参数：int n   ：盘子编号
-		    char src：起始柱
-		    char dst：目标柱
-		    const int x、const int y：显示位置
-		    bool is_initial：是否是初始状态
+  功    能：在(x,y)处更新"第n步"的说明，并画出三根立柱的纵向示意及底部立柱图
+  输入参数：int n   ：本次移动的盘子编号
+		   char src：起始柱（'A'-'C'）
+		   char dst：目标柱（'A'-'C'）
+		   const int x、const int y：显示位置（菜单4/8/9各自的起点）
+		   bool is_initial：非0表示显示"初始"而不是"第n步"
   返 回 值：无
-  说    明：
+  说    明：叠加在同一位置反复刷新，形成字符界面的动画效果
 ***************************************************************************/
-void Screen_update(int n, char src, char dst, const int x, const int y, bool is_initial = 0)
+void Screen_update(int n, char src, char dst, const int x, const int y, bool is_initial = 0) //在(x,y)处更新数组可视化
 {
     cct_gotoxy(x, y);
     if (is_initial) {
@@ -377,15 +379,15 @@ void Screen_update(int n, char src, char dst, const int x, const int y, bool is_
 
 /***************************************************************************
   函数名称：Screen_show_step
-  功    能：文字演示的步骤详解
-  输入参数：int n   ：盘子编号
-		    char src：起始柱
-		    char dst：目标柱
-		    int mod ：菜单选项
+  功    能：按菜单要求显示一步移动：文字形式、横向数组形式或字符动画形式
+  输入参数：int n   ：本次移动的盘子编号
+		   char src：起始柱（'A'-'C'）
+		   char dst：目标柱（'A'-'C'）
+		   int mod ：菜单选项，用于决定显示方式
   返 回 值：无
   说    明：mod=1/2/3 为文字及横向数组，mod=4/8/9 为字符界面的动画
 ***************************************************************************/
-void Screen_show_step(int n, char src, char dst, int mod)
+void Screen_show_step(int n, char src, char dst, int mod) //文字演示的步骤详解
 {
     if (mod == 1) {
         cout << n << "# " << src << "---->" << dst << endl;
@@ -413,13 +415,13 @@ void Screen_show_step(int n, char src, char dst, int mod)
 
 /***************************************************************************
   函数名称：Hanoi_init
-  功    能：初始化数组
-  输入参数：int n  ：盘子数
-		    int src：起始柱的柱号
+  功    能：清空三个柱子，并把编号 n、n-1、...、1 的盘子依次压入起始柱
+  输入参数：int n  ：盘子层数
+		   int src：起始柱的柱号（0-2）
   返 回 值：无
-  说    明：
+  说    明：同时把步数计数器清零
 ***************************************************************************/
-void Hanoi_init(int n, int src) 
+void Hanoi_init(int n, int src) //初始化数组
 {
     step_count = 0;
     
@@ -437,12 +439,12 @@ void Hanoi_init(int n, int src)
 /***************************************************************************
   函数名称：Hanoi_move
   功    能：把 src 柱顶端的盘子移到 dst 柱，并显示这一步
-  输入参数：int n  ：盘子层数
-		    int src：起始柱的柱号
-		    int dst：目标柱的柱号
-		    int mod：菜单选项
+  输入参数：int n  ：盘子层数（游戏版用来判断是否结束）
+		   int src：起始柱的柱号（0-2）
+		   int dst：目标柱的柱号（0-2）
+		   int mod：菜单选项，决定显示方式
   返 回 值：0 表示移动成功，-1 表示非法移动（源柱为空或大盘压小盘）
-  说    明：
+  说    明：先检查非法情况，通过后再改栈内容并显示，保证数组与显示一致
 ***************************************************************************/
 int Hanoi_move(int n, int src, int dst, int mod) //单步移动
 { 
@@ -473,16 +475,16 @@ int Hanoi_move(int n, int src, int dst, int mod) //单步移动
 
 /***************************************************************************
   函数名称：Hanoi_main
-  功    能：递归求解汉诺塔
+  功    能：递归求解汉诺塔：把 n 层盘子从 src 柱借助 tmp 柱移到 dst 柱
   输入参数：int n  ：本次要移动的层数
-		    int src：起始柱的柱号
-		    int tmp：中转柱的柱号
-		    int dst：目标柱的柱号
-		    int mod：菜单选项
+		   int src：起始柱的柱号（0-2）
+		   int tmp：中转柱的柱号（0-2）
+		   int dst：目标柱的柱号（0-2）
+		   int mod：菜单选项，决定显示方式
   返 回 值：无
   说    明：标准递归：先移 n-1 层到中转柱，再移最大盘，最后把 n-1 层移到目标柱
 ***************************************************************************/
-void Hanoi_main(int n, int src, int tmp, int dst, int mod)
+void Hanoi_main(int n, int src, int tmp, int dst, int mod) //递归函数
 {
     if (n == 1) {
         Hanoi_move(n, src, dst, mod);
@@ -495,11 +497,11 @@ void Hanoi_main(int n, int src, int tmp, int dst, int mod)
 
 /***************************************************************************
   函数名称：Hanoi_check
-  功    能：是否已经全部移到目标柱
+  功    能：判断游戏版是否已经把 n 层盘子全部移到目标柱
   输入参数：int n ：盘子层数
-		    int dst：目标柱的柱号
+		   int dst：目标柱的柱号（0-2）
   返 回 值：true 表示已完成，false 表示未完成
-  说    明：
+  说    明：目标柱上的盘子数与总层数相等即视为完成
 ***************************************************************************/
 bool Hanoi_check(int n, int dst) //检查是否移动完成
 { 
@@ -511,9 +513,9 @@ bool Hanoi_check(int n, int dst) //检查是否移动完成
   功    能：清除提示行并显示"按回车键继续..."，等待用户按回车
   输入参数：无
   返 回 值：无
-  说    明：
+  说    明：除了回车键以外的按键都忽略
 ***************************************************************************/
-void To_be_continued()
+void To_be_continued() //结束
 {
     cout << setw(100) << ' ' << '\r';
     cout << "按回车键继续...";
@@ -526,12 +528,12 @@ void To_be_continued()
 
 /***************************************************************************
   函数名称：Run_hanoi
-  功    能：按菜单选项执行演示
-  输入参数：int mod：菜单选项
-  返 回 值：-1 表示退出，0 表示本题结束
-  说    明：
+  功    能：按菜单选项执行对应的汉诺塔演示：读入层数、起始柱、目标柱、速度后开始演示
+  输入参数：int mod：菜单选项（0-9）
+  返 回 值：-1 表示用户选择退出，0 表示本题结束并要求重新显示菜单
+  说    明：mod=0 退出；mod=5/6/7/8/9 为图形方式，需要 HDC 画图；其余为字符方式
 ***************************************************************************/
-int Run_hanoi(int mod)
+int Run_hanoi(int mod) //接主函数
 {
 	cout << mod << endl << endl;
 

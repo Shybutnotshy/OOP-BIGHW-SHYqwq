@@ -23,10 +23,10 @@ using namespace std;
 
 /***************************************************************************
   函数名称：Menu_toupper
-  功    能：小写字母转大写字母
+  功    能：将小写字母转换成大写字母，非小写字母的字符原样返回
   输入参数：const char ch：待转换的字符
   返 回 值：转换后的字符
-  说    明：
+  说    明：菜单选项不区分大小写时、以及各项目规范化用户输入时都调用此函数
 ***************************************************************************/
 char Menu_toupper(const char ch)
 {
@@ -38,18 +38,20 @@ char Menu_toupper(const char ch)
 
 /***************************************************************************
   函数名称：Menu_show
-  功    能：显示一个菜单块
-  输入参数：const char* const* item_list：菜单项文本
-		    const int item_count        ：菜单项个数
-		    const char* prompt          ：末尾提示串
+  功    能：显示一个菜单块：首尾各一条分隔线，中间逐行显示各菜单项，最后显示提示串
+  输入参数：const char* const* item_list：菜单项文本数组
+		   const int item_count        ：菜单项个数
+		   const char* prompt          ：末尾的提示串，传 NULL 则不显示
   返 回 值：无
-  说    明：
+  说    明：分隔线的长度取最长菜单项的字节数（中文为双字节，一个汉字正好占两列），
+		   与终端缺省字体下的实际显示宽度一致，菜单内容变化时无需手工调整
 ***************************************************************************/
 void Menu_show(const char* const* item_list, const int item_count, const char* prompt)
 {
 	int max_len = 0;
 	int i;
 
+	/* 统计最长菜单项的长度，作为分隔线的长度 */
 	for (i = 0; i < item_count; i++) {
 		if (!item_list[i]) {
 			continue;
@@ -86,11 +88,13 @@ void Menu_show(const char* const* item_list, const int item_count, const char* p
 
 /***************************************************************************
   函数名称：Menu_getch
-  功    能：等待选择合法字符
-  输入参数：const char* accept ：允许的字符集合
-		    const int ignore_case：非 0 表示不区分大小写
-  返 回 值：按下的字符
-  说    明：
+  功    能：等待用户按下一个属于 accept 的可见字符，按到非法键则继续等待
+  输入参数：const char* accept ：允许的字符集合，例如 "0123456789"、"ABCDEFGQ"
+		   const int ignore_case：非 0 表示不区分大小写（accept 中只需写大写字母）
+  返 回 值：用户按下的字符（不区分大小写时已转换成大写）
+  说    明：1、直接读键盘，不需要按回车，所以一次按键即可完成选择
+		   2、功能键（方向键等）的第一个字节为 '\0'，直接忽略，不会误判为选项
+		   3、accept 中除字母、数字外还可以放其它字符，只要有需要就写进去即可
 ***************************************************************************/
 char Menu_getch(const char* accept, const int ignore_case)
 {
@@ -112,10 +116,10 @@ char Menu_getch(const char* accept, const int ignore_case)
 
 /***************************************************************************
   函数名称：Menu_select
-  功    能：公共菜单总函数
-  输入参数：
-  返 回 值：
-  说    明：
+  功    能：显示菜单并返回用户选中的字符
+  输入参数：参见 Menu_show 与 Menu_getch
+  返 回 值：用户选中的字符
+  说    明：把"显示"与"选择"两步合成一次调用，各项目只需准备自己的菜单项文本
 ***************************************************************************/
 char Menu_select(const char* const* item_list, const int item_count, const char* prompt,
                  const char* accept, const int ignore_case)

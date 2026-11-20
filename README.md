@@ -15,6 +15,8 @@ BigHW/                  VS2026 解决方案（提交内容）
     90-01-b2/           上学期作业：彩球游戏
     90-02-b1/           本学期作业项目
     test-cct/           cmd_console_tools 测试
+    my_ping/            hw1：ping 参数分析
+    test_args_analyse_tools/  hw1：class_aat 测试
     common/             公共源文件
     include/            公共头文件
 Version-info/           每次作业老师下发的题目 PDF
@@ -31,6 +33,8 @@ README.md
 | `90-02-b1` | 本学期作业项目 |
 | `test-cct` | `cmd_console_tools` 系列函数测试 |
 | `common` / `include` | 公共源文件/头文件，仅查看，不单独生成 |
+| `my_ping` | 综合题 1：ping 命令参数分析（hw1） |
+| `test_args_analyse_tools` | `class_aat` 工具集测试（hw1） |
 
 ## 构建
 
@@ -41,7 +45,7 @@ README.md
 也可以逐个项目构建：
 
 ```powershell
-msbuild BigHW\BigHW.slnx /t:90-01-b1 /p:Configuration=Debug /p:Platform=x64
+msbuild BigHW\BigHW.slnx /t:my_ping /p:Configuration=Debug /p:Platform=x64
 ```
 
 ## 版本
@@ -49,12 +53,14 @@ msbuild BigHW\BigHW.slnx /t:90-01-b1 /p:Configuration=Debug /p:Platform=x64
 | 标签 | 内容 | 作业 PDF |
 |---|---|---|
 | `hw0` | 汉诺塔、彩球游戏、cmd 工具集 | [hw0.pdf](Version-info/hw0.pdf) |
+| `hw1` | `class_aat` 工具集、my_ping、test_args_analyse_tools | [hw1.pdf](Version-info/hw1.pdf) |
 
 ## Version-info
 
 `Version-info/` 保存每次作业老师下发的 PDF，文件名与作业编号一致：
 
 - `hw0.pdf`
+- `hw1.pdf`
 - 后续作业按 `hwN.pdf` 追加
 
 该目录只用于存档题目，不参与编译。
@@ -63,5 +69,5 @@ msbuild BigHW\BigHW.slnx /t:90-01-b1 /p:Configuration=Debug /p:Platform=x64
 
 - 源文件 `*.h` / `*.cpp` 使用 GBK（代码页 936）编码，换行为 CRLF。
 - 公共文件只保留一份：头文件在 `include/`，源文件在 `common/`。
-- 不使用全局变量、STL 容器、`scanf`/`printf`、`goto`。
+- 不使用全局变量、STL 容器、`scanf`/`printf`、`goto`；hw1 按 PDF 要求允许 `std::string`。
 - 提交前删除 `.vs`、`x64`、`Debug`、`Release` 等本地产物。

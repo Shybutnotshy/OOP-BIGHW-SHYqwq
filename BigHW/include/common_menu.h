@@ -16,9 +16,15 @@
 
    ------------------------------------------------------------------------------------------------------ */
 
-
+/* 将小写字母转换成大写字母，其它字符原样返回（各项目的输入规范化也用它） */
 char Menu_toupper(const char ch);
+
+/* 显示菜单：首尾各一条分隔线，中间逐行显示菜单项，最后显示提示串，不等待输入 */
 void Menu_show(const char* const* item_list, const int item_count, const char* prompt);
+
+/* 等待用户按下一个属于 accept 的字符（不需要按回车），ignore_case 非 0 时不区分大小写 */
 char Menu_getch(const char* accept, const int ignore_case);
+
+/* 显示菜单并返回用户选中的字符（= Menu_show + Menu_getch） */
 char Menu_select(const char* const* item_list, const int item_count, const char* prompt,
                  const char* accept, const int ignore_case);

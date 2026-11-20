@@ -142,11 +142,14 @@
     <ClCompile Include="cmd_console_tools.cpp" />
     <ClCompile Include="cmd_hdc_tools.cpp" />
     <ClCompile Include="common_menu.cpp" />
+    <ClCompile Include="class_aat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cmd_console_tools.h" />
     <ClInclude Include="..\include\cmd_hdc_tools.h" />
     <ClInclude Include="..\include\common_menu.h" />
+    <ClInclude Include="..\include\class_aat.h" />
+    <ClInclude Include="..\include\lib_aat_tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

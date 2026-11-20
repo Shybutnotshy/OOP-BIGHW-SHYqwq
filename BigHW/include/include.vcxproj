@@ -142,6 +142,8 @@
     <ClInclude Include="cmd_console_tools.h" />
     <ClInclude Include="cmd_hdc_tools.h" />
     <ClInclude Include="common_menu.h" />
+    <ClInclude Include="class_aat.h" />
+    <ClInclude Include="lib_aat_tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
