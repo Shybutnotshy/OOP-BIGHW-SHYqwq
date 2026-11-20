@@ -1,4 +1,4 @@
-/* BigHW */
+/* 2551145 沈涵阳 图灵 */
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -16,13 +16,13 @@ using namespace std;
 	 允许加入其它需要static函数（内部工具用）
    ---------------------------------------------------------------- */
 
-/***************************************************************************
-  函数名称：AAT_is_option
-  功    能：判断一个命令行参数是不是 "--" 开头的有效可变参数名称
-  输入参数：str：待判断的字符串
-  返 回 值：true - 是可变参数；false - 不是（固定参数、"-x"、"--"、空串等）
-  说    明：
- ***************************************************************************/
+   /***************************************************************************
+	 函数名称：AAT_is_option
+	 功    能：判断一个命令行参数是不是 "--" 开头的有效可变参数名称
+	 输入参数：str：待判断的字符串
+	 返 回 值：true - 是可变参数；false - 不是（固定参数、"-x"、"--"、空串等）
+	 说    明：
+	***************************************************************************/
 static bool AAT_is_option(const char* const str)
 {
 	if (str == NULL) {
@@ -233,7 +233,7 @@ struct AAT_set_traits<double> {
   功    能：统计以 sentinel 结尾的集合元素个数
   输入参数：set     ：集合首地址，以 sentinel 结尾
 			sentinel：集合结束标志（int 用 INVALID_INT_VALUE_OF_SET，
-			          double 用 INVALID_DOUBLE_VALUE_OF_SET，string 用空串）
+					  double 用 INVALID_DOUBLE_VALUE_OF_SET，string 用空串）
   返 回 值：元素个数（set 为 NULL 时返回 0）
   说    明：
  ***************************************************************************/
@@ -544,20 +544,19 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
   说    明：
  ***************************************************************************/
 args_analyse_tools::~args_analyse_tools()
-{
-}
+{ }
 
 /* ---------------------------------------------------------------
 	 允许AAT中自定义成员函数的实现（private）
    ---------------------------------------------------------------- */
 
-/***************************************************************************
-  函数名称：args_analyse_tools::get_name
-  功    能：
-  输入参数：
-  返 回 值：
-  说    明：已实现，不要动
- ***************************************************************************/
+   /***************************************************************************
+	 函数名称：args_analyse_tools::get_name
+	 功    能：
+	 输入参数：
+	 返 回 值：
+	 说    明：已实现，不要动
+	***************************************************************************/
 const string args_analyse_tools::get_name() const
 {
 	return this->args_name;
@@ -645,21 +644,36 @@ const string args_analyse_tools::get_str_ipaddr() const
 const char* args_analyse_tools::AAT_get_type() const
 {
 	switch (this->extargs_type) {
-	case ST_EXTARGS_TYPE::boolean:					return "Bool";
-	case ST_EXTARGS_TYPE::int_with_default:			return "IntWithDefault";
-	case ST_EXTARGS_TYPE::int_with_error:			return "IntWithError";
-	case ST_EXTARGS_TYPE::int_with_set_default:		return "IntSETWithDefault";
-	case ST_EXTARGS_TYPE::int_with_set_error:		return "IntSETWithError";
-	case ST_EXTARGS_TYPE::double_with_default:		return "DoubleWithDefault";
-	case ST_EXTARGS_TYPE::double_with_error:		return "DoubleWithError";
-	case ST_EXTARGS_TYPE::double_with_set_default:	return "DoubleSETWithDefault";
-	case ST_EXTARGS_TYPE::double_with_set_error:	return "DoubleSETWithError";
-	case ST_EXTARGS_TYPE::str:						return "String";
-	case ST_EXTARGS_TYPE::str_with_set_default:		return "StringSETWithDefault";
-	case ST_EXTARGS_TYPE::str_with_set_error:		return "StringSETWithError";
-	case ST_EXTARGS_TYPE::ipaddr_with_default:		return "IPAddrWithDefault";
-	case ST_EXTARGS_TYPE::ipaddr_with_error:		return "IPAddrWithError";
-	default:										return "Undefined";
+		case ST_EXTARGS_TYPE::boolean:					
+			return "Bool";
+		case ST_EXTARGS_TYPE::int_with_default:			
+			return "IntWithDefault";
+		case ST_EXTARGS_TYPE::int_with_error:			
+			return "IntWithError";
+		case ST_EXTARGS_TYPE::int_with_set_default:		
+			return "IntSETWithDefault";
+		case ST_EXTARGS_TYPE::int_with_set_error:		
+			return "IntSETWithError";
+		case ST_EXTARGS_TYPE::double_with_default:		
+			return "DoubleWithDefault";
+		case ST_EXTARGS_TYPE::double_with_error:		
+			return "DoubleWithError";
+		case ST_EXTARGS_TYPE::double_with_set_default:	
+			return "DoubleSETWithDefault";
+		case ST_EXTARGS_TYPE::double_with_set_error:	
+			return "DoubleSETWithError";
+		case ST_EXTARGS_TYPE::str:						
+			return "String";
+		case ST_EXTARGS_TYPE::str_with_set_default:		
+			return "StringSETWithDefault";
+		case ST_EXTARGS_TYPE::str_with_set_error:		
+			return "StringSETWithError";
+		case ST_EXTARGS_TYPE::ipaddr_with_default:		
+			return "IPAddrWithDefault";
+		case ST_EXTARGS_TYPE::ipaddr_with_error:		
+			return "IPAddrWithError";
+		default:										
+			return "Undefined";
 	}
 }
 
@@ -673,17 +687,19 @@ const char* args_analyse_tools::AAT_get_type() const
 const int args_analyse_tools::AAT_has_default() const
 {
 	switch (this->extargs_type) {
-	case ST_EXTARGS_TYPE::int_with_default:
-	case ST_EXTARGS_TYPE::int_with_set_default:
-	case ST_EXTARGS_TYPE::double_with_default:
-	case ST_EXTARGS_TYPE::double_with_set_default:
-		return 1;
-	case ST_EXTARGS_TYPE::str:
-	case ST_EXTARGS_TYPE::str_with_set_default:
-	case ST_EXTARGS_TYPE::ipaddr_with_default:
-		return !this->extargs_string_default.empty();
-	default:
-		return 0;
+		case ST_EXTARGS_TYPE::int_with_default:
+		case ST_EXTARGS_TYPE::int_with_set_default:
+		case ST_EXTARGS_TYPE::double_with_default:
+		case ST_EXTARGS_TYPE::double_with_set_default:
+			return 1;
+
+		case ST_EXTARGS_TYPE::str:
+		case ST_EXTARGS_TYPE::str_with_set_default:
+		case ST_EXTARGS_TYPE::ipaddr_with_default:
+			return !this->extargs_string_default.empty();
+
+		default:
+			return 0;
 	}
 }
 
@@ -702,19 +718,23 @@ const string args_analyse_tools::AAT_get_val() const
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
 			return "true";
+
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
 			return AAT_int_to_string(this->extargs_int_value);
+
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
 			return AAT_double_to_string(this->extargs_double_value);
+
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
 			return AAT_ipaddr_to_string(this->extargs_ipaddr_value);
+
 		default:
 			return this->extargs_string_value;
 	}
@@ -732,20 +752,25 @@ const string args_analyse_tools::AAT_get_default() const
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
 			return this->extargs_bool_default ? "true" : "false";
+
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_set_default:
 			return AAT_int_to_string(this->extargs_int_default);
+
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 			return AAT_double_to_string(this->extargs_double_default);
+
 		case ST_EXTARGS_TYPE::str:
 		case ST_EXTARGS_TYPE::str_with_set_default:
 			return this->extargs_string_default.empty() ? string("/") : this->extargs_string_default;
+
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 			if (this->extargs_ipaddr_default == 0) {
 				return "/";
 			}
 			return AAT_ipaddr_to_string(this->extargs_ipaddr_default);
+
 		default:
 			return "/";
 	}
@@ -830,20 +855,20 @@ const string args_analyse_tools::AAT_get_info() const
 	}
 	if (this->AAT_has_default()) {
 		switch (this->extargs_type) {
-		case ST_EXTARGS_TYPE::int_with_default:
-		case ST_EXTARGS_TYPE::int_with_set_default:
-			result += " 缺省:" + AAT_int_to_string(this->extargs_int_default);
-			break;
-		case ST_EXTARGS_TYPE::double_with_default:
-		case ST_EXTARGS_TYPE::double_with_set_default:
-			result += " 缺省:" + AAT_general_to_string(this->extargs_double_default);
-			break;
-		case ST_EXTARGS_TYPE::ipaddr_with_default:
-			result += " 缺省:" + this->extargs_string_default;
-			break;
-		default:
-			result += " 缺省:" + this->extargs_string_default;
-			break;
+			case ST_EXTARGS_TYPE::int_with_default:
+			case ST_EXTARGS_TYPE::int_with_set_default:
+				result += " 缺省:" + AAT_int_to_string(this->extargs_int_default);
+				break;
+			case ST_EXTARGS_TYPE::double_with_default:
+			case ST_EXTARGS_TYPE::double_with_set_default:
+				result += " 缺省:" + AAT_general_to_string(this->extargs_double_default);
+				break;
+			case ST_EXTARGS_TYPE::ipaddr_with_default:
+				result += " 缺省:" + this->extargs_string_default;
+				break;
+			default:
+				result += " 缺省:" + this->extargs_string_default;
+				break;
 		}
 	}
 	result += ")";
@@ -961,7 +986,7 @@ int args_analyse_tools::AAT_switch_value(const char* const str)
 			u_int value = 0;
 			if (!AAT_str_to_ipaddr(str, value)) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::ipaddr_with_error) {
-						cout << "参数[" << this->args_name << "]的附加参数值(" << ((str != NULL) ? str : "")
+					cout << "参数[" << this->args_name << "]的附加参数值(" << ((str != NULL) ? str : "")
 						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
@@ -1002,7 +1027,7 @@ int args_analyse_tools::AAT_print(const int width_name, const int width_type, co
   返 回 值：
   说    明：友元函数
  ***************************************************************************/
-int args_analyse_process(const int argc, const char* const *const argv, args_analyse_tools* const args, const int follow_up_args)
+int args_analyse_process(const int argc, const char* const* const argv, args_analyse_tools* const args, const int follow_up_args)
 {
 	if (argc <= 0 || argv == NULL || args == NULL) {
 		return -1;
