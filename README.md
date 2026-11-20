@@ -13,7 +13,7 @@ BigHW/                  VS2026 解决方案（提交内容）
     BigHW.slnx
     90-01-b1/           上学期作业：汉诺塔
     90-01-b2/           上学期作业：彩球游戏
-    90-02-b1/           本学期作业项目
+    90-02-b1/           项目示例（hello_world）
     test-cct/           cmd_console_tools 测试
     my_ping/            hw1：ping 参数分析
     test_args_analyse_tools/  hw1：class_aat 测试
@@ -30,7 +30,7 @@ README.md
 |---|---|
 | `90-01-b1` | 汉诺塔 |
 | `90-01-b2` | 彩球游戏 |
-| `90-02-b1` | 本学期作业项目 |
+| `90-02-b1` | 项目示例 |
 | `test-cct` | `cmd_console_tools` 系列函数测试 |
 | `common` / `include` | 公共源文件/头文件，仅查看，不单独生成 |
 | `my_ping` | 综合题 1：ping 命令参数分析（hw1） |
@@ -59,6 +59,8 @@ msbuild BigHW\BigHW.slnx /t:my_ping /p:Configuration=Debug /p:Platform=x64
 
 `Version-info/` 保存每次作业老师下发的 PDF，文件名与作业编号一致：
 
+- `hw0-hanoi.pdf` —— 前置作业汉诺塔
+- `hw0-color_linez.pdf` —— 前置作业彩球游戏
 - `hw0.pdf`
 - `hw1.pdf`
 - 后续作业按 `hwN.pdf` 追加
