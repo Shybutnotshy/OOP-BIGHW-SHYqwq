@@ -1,4 +1,4 @@
-/* 2551145 …Ú∫≠—Ù Õº¡È */
+/* BigHW */
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
