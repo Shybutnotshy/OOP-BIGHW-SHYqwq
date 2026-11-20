@@ -109,14 +109,14 @@ private:
 	#endif
 #endif
 
-	const char* aat_get_type() const;
-	const string aat_get_val() const;
-	const string aat_get_default() const;
-	const string aat_get_range() const;
-	const string aat_get_info() const;
-	const int aat_has_default() const;
-	int aat_switch_value(const char* const str);
-	int aat_print(const int width_name, const int width_type, const int width_default,
+	const char* AAT_get_type() const;
+	const string AAT_get_val() const;
+	const string AAT_get_default() const;
+	const string AAT_get_range() const;
+	const string AAT_get_info() const;
+	const int AAT_has_default() const;
+	int AAT_switch_value(const char* const str);
+	int AAT_print(const int width_name, const int width_type, const int width_default,
 			  const int width_exists, const int width_value) const;
 
 public:

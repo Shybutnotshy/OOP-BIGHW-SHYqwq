@@ -17,13 +17,13 @@ using namespace std;
    ---------------------------------------------------------------- */
 
 /***************************************************************************
-  函数名称：aat_is_option
+  函数名称：AAT_is_option
   功    能：判断一个命令行参数是不是 "--" 开头的有效可变参数名称
   输入参数：str：待判断的字符串
   返 回 值：true - 是可变参数；false - 不是（固定参数、"-x"、"--"、空串等）
   说    明：
  ***************************************************************************/
-static bool aat_is_option(const char* const str)
+static bool AAT_is_option(const char* const str)
 {
 	if (str == NULL) {
 		return false;
@@ -35,13 +35,13 @@ static bool aat_is_option(const char* const str)
 }
 
 /***************************************************************************
-  函数名称：aat_str_to_int
+  函数名称：AAT_str_to_int
   功    能：把字符串解析成 int，用于 int 型附加参数
   输入参数：str   ：待解析的字符串（可带一个 '+' / '-' 号，其余必须全是数字）
   返 回 值：0 - 成功，value 带回结果；-1 - 不是合法的整数写法
   说    明：
  ***************************************************************************/
-static int aat_str_to_int(const char* const str, int& value)
+static int AAT_str_to_int(const char* const str, int& value)
 {
 	if (str == NULL || str[0] == '\0') {
 		return -1;
@@ -82,13 +82,13 @@ static int aat_str_to_int(const char* const str, int& value)
 }
 
 /***************************************************************************
-  函数名称：aat_str_to_double
+  函数名称：AAT_str_to_double
   功    能：把字符串解析成 double，用于 double 型附加参数
   输入参数：str   ：待解析的字符串（可带一个 '+' / '-' 号，最多一个小数点，其余全是数字）
   返 回 值：0 - 成功，value 带回结果；-1 - 不是合法的浮点数写法
   说    明：
  ***************************************************************************/
-static int aat_str_to_double(const char* const str, double& value)
+static int AAT_str_to_double(const char* const str, double& value)
 {
 	if (str == NULL) {
 		return -1;
@@ -120,13 +120,13 @@ static int aat_str_to_double(const char* const str, double& value)
 }
 
 /***************************************************************************
-  函数名称：aat_str_to_ipaddr
+  函数名称：AAT_str_to_ipaddr
   功    能：把 "127.0.0.1" 形式的字符串解析成 u_int32 型的 0x7f000001
   输入参数：str   ：待解析的字符串
   返 回 值：true - 成功，value 带回结果；false - 不是合法的点分十进制 IP 地址
   说    明：
  ***************************************************************************/
-static bool aat_str_to_ipaddr(const char* const str, u_int& value)
+static bool AAT_str_to_ipaddr(const char* const str, u_int& value)
 {
 	if (str == NULL) {
 		return false;
@@ -158,13 +158,13 @@ static bool aat_str_to_ipaddr(const char* const str, u_int& value)
 }
 
 /***************************************************************************
-  函数名称：aat_ipaddr_to_string
+  函数名称：AAT_ipaddr_to_string
   功    能：把 u_int32 型的 IP 地址还原成 "127.0.0.1" 形式
   输入参数：ipaddr：IP地址的 u_int32 形式
   返 回 值：点分十进制字符串
   说    明：
  ***************************************************************************/
-static string aat_ipaddr_to_string(const u_int ipaddr)
+static string AAT_ipaddr_to_string(const u_int ipaddr)
 {
 	ostringstream oss;
 	oss << ((ipaddr >> 24) & 0xFFu) << '.' << ((ipaddr >> 16) & 0xFFu) << '.'
@@ -173,13 +173,13 @@ static string aat_ipaddr_to_string(const u_int ipaddr)
 }
 
 /***************************************************************************
-  函数名称：aat_int_to_string
+  函数名称：AAT_int_to_string
   功    能：int 转字符串（十进制）
   输入参数：value：待转换的整数
   返 回 值：十进制字符串
   说    明：
  ***************************************************************************/
-static string aat_int_to_string(const int value)
+static string AAT_int_to_string(const int value)
 {
 	ostringstream oss;
 	oss << value;
@@ -187,13 +187,13 @@ static string aat_int_to_string(const int value)
 }
 
 /***************************************************************************
-  函数名称：aat_double_to_string
+  函数名称：AAT_double_to_string
   功    能：double 转字符串（固定 6 位小数）
   输入参数：value：待转换的浮点数
   返 回 值："1.230000" 这种形式
   说    明：
  ***************************************************************************/
-static string aat_double_to_string(const double value)
+static string AAT_double_to_string(const double value)
 {
 	ostringstream oss;
 	oss << fixed << setprecision(6) << value;
@@ -201,13 +201,13 @@ static string aat_double_to_string(const double value)
 }
 
 /***************************************************************************
-  函数名称：aat_general_to_string
+  函数名称：AAT_general_to_string
   功    能：double 转字符串（默认 6 位有效数字，即 %g 的效果）
   输入参数：value：待转换的浮点数
   返 回 值："1.23"、"99.9" 这种形式
   说    明：
  ***************************************************************************/
-static string aat_general_to_string(const double value)
+static string AAT_general_to_string(const double value)
 {
 	ostringstream oss;
 	oss << value;
@@ -215,21 +215,21 @@ static string aat_general_to_string(const double value)
 }
 
 template <typename T>
-struct aat_set_traits {
+struct AAT_set_traits {
 	static bool equal(const T& lhs, const T& rhs) {
 		return lhs == rhs;
 	}
 };
 
 template <>
-struct aat_set_traits<double> {
+struct AAT_set_traits<double> {
 	static bool equal(const double& lhs, const double& rhs) {
 		return (lhs > rhs - DOUBLE_DELTA) && (lhs < rhs + DOUBLE_DELTA);
 	}
 };
 
 /***************************************************************************
-  函数名称：aat_set_count
+  函数名称：AAT_set_count
   功    能：统计以 sentinel 结尾的集合元素个数
   输入参数：set     ：集合首地址，以 sentinel 结尾
 			sentinel：集合结束标志（int 用 INVALID_INT_VALUE_OF_SET，
@@ -238,7 +238,7 @@ struct aat_set_traits<double> {
   说    明：
  ***************************************************************************/
 template <typename T>
-static int aat_set_count(const T* const set, const T& sentinel)
+static int AAT_set_count(const T* const set, const T& sentinel)
 {
 	int count = 0;
 	if (set == NULL) {
@@ -251,7 +251,7 @@ static int aat_set_count(const T* const set, const T& sentinel)
 }
 
 /***************************************************************************
-  函数名称：aat_in_set
+  函数名称：AAT_in_set
   功    能：判断一个值是否属于集合
   输入参数：set     ：集合首地址，以 sentinel 结尾
 			sentinel：集合结束标志
@@ -260,11 +260,11 @@ static int aat_set_count(const T* const set, const T& sentinel)
   说    明：
  ***************************************************************************/
 template <typename T>
-static bool aat_in_set(const T* const set, const T& sentinel, const T& value)
+static bool AAT_in_set(const T* const set, const T& sentinel, const T& value)
 {
-	const int count = aat_set_count(set, sentinel);
+	const int count = AAT_set_count(set, sentinel);
 	for (int i = 0; i < count; i++) {
-		if (aat_set_traits<T>::equal(set[i], value)) {
+		if (AAT_set_traits<T>::equal(set[i], value)) {
 			return true;
 		}
 	}
@@ -272,75 +272,75 @@ static bool aat_in_set(const T* const set, const T& sentinel, const T& value)
 }
 
 /***************************************************************************
-  函数名称：aat_int_set_to_string
+  函数名称：AAT_int_set_to_string
   功    能：把 int 型集合拼成 "11/22/33" 形式
   输入参数：set：集合首地址
   返 回 值：拼接后的字符串
   说    明：
  ***************************************************************************/
-static string aat_int_set_to_string(const int* const set)
+static string AAT_int_set_to_string(const int* const set)
 {
-	const int count = aat_set_count(set, INVALID_INT_VALUE_OF_SET);
+	const int count = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
 	string result;
 	for (int i = 0; i < count; i++) {
 		if (i > 0) {
 			result += '/';
 		}
-		result += aat_int_to_string(set[i]);
+		result += AAT_int_to_string(set[i]);
 	}
 	return result;
 }
 
 /***************************************************************************
-  函数名称：aat_double_set_to_string
+  函数名称：AAT_double_set_to_string
   功    能：把 double 型集合拼成 "1.100000/2.200000" 形式
   输入参数：set：集合首地址
   返 回 值：拼接后的字符串
   说    明：
  ***************************************************************************/
-static string aat_double_set_to_string(const double* const set)
+static string AAT_double_set_to_string(const double* const set)
 {
-	const int count = aat_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
 	string result;
 	for (int i = 0; i < count; i++) {
 		if (i > 0) {
 			result += '/';
 		}
-		result += aat_double_to_string(set[i]);
+		result += AAT_double_to_string(set[i]);
 	}
 	return result;
 }
 
 /***************************************************************************
-  函数名称：aat_double_set_to_general_string
+  函数名称：AAT_double_set_to_general_string
   功    能：把 double 型集合拼成 "1.1/2.2/3.3" 形式（%g 风格）
   输入参数：set：集合首地址
   返 回 值：拼接后的字符串
   说    明：
  ***************************************************************************/
-static string aat_double_set_to_general_string(const double* const set)
+static string AAT_double_set_to_general_string(const double* const set)
 {
-	const int count = aat_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
 	string result;
 	for (int i = 0; i < count; i++) {
 		if (i > 0) {
 			result += '/';
 		}
-		result += aat_general_to_string(set[i]);
+		result += AAT_general_to_string(set[i]);
 	}
 	return result;
 }
 
 /***************************************************************************
-  函数名称：aat_string_set_to_string
+  函数名称：AAT_string_set_to_string
   功    能：把 string 型集合拼成 "md5/sha1/..." 形式
   输入参数：set：集合首地址
   返 回 值：拼接后的字符串
   说    明：
  ***************************************************************************/
-static string aat_string_set_to_string(const string* const set)
+static string AAT_string_set_to_string(const string* const set)
 {
-	const int count = aat_set_count(set, string(""));
+	const int count = AAT_set_count(set, string(""));
 	string result;
 	for (int i = 0; i < count; i++) {
 		if (i > 0) {
@@ -438,7 +438,7 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 	this->extargs_num = ext_num;
 	this->extargs_int_set = const_cast<int*>(set);
 	int default_value = 0;
-	const int count = aat_set_count(set, INVALID_INT_VALUE_OF_SET);
+	const int count = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
 	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
 		default_value = set[def_of_set_pos];
 	}
@@ -463,7 +463,7 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 	this->extargs_string_value = def;
 	if (type == ST_EXTARGS_TYPE::ipaddr_with_default || type == ST_EXTARGS_TYPE::ipaddr_with_error) {
 		u_int ipaddr = 0;
-		if (!aat_str_to_ipaddr(def.c_str(), ipaddr)) {
+		if (!AAT_str_to_ipaddr(def.c_str(), ipaddr)) {
 			ipaddr = 0;
 		}
 		this->extargs_ipaddr_default = ipaddr;
@@ -486,7 +486,7 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 	this->extargs_num = ext_num;
 	this->extargs_string_set = const_cast<string*>(set);
 	string default_value = "";
-	const int count = aat_set_count(set, string(""));
+	const int count = AAT_set_count(set, string(""));
 	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
 		default_value = set[def_of_set_pos];
 	}
@@ -528,7 +528,7 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 	this->extargs_num = ext_num;
 	this->extargs_double_set = const_cast<double*>(set);
 	double default_value = 0.0;
-	const int count = aat_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
 	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
 		default_value = set[def_of_set_pos];
 	}
@@ -632,17 +632,17 @@ const unsigned int args_analyse_tools::get_ipaddr() const
  ***************************************************************************/
 const string args_analyse_tools::get_str_ipaddr() const
 {
-	return aat_ipaddr_to_string(this->extargs_ipaddr_value);
+	return AAT_ipaddr_to_string(this->extargs_ipaddr_value);
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_get_type
+  函数名称：args_analyse_tools::AAT_get_type
   功    能：返回本参数类型对应的名称，用于打印参数表
   输入参数：无
   返 回 值：类型名称字符串
   说    明：
  ***************************************************************************/
-const char* args_analyse_tools::aat_get_type() const
+const char* args_analyse_tools::AAT_get_type() const
 {
 	switch (this->extargs_type) {
 	case ST_EXTARGS_TYPE::boolean:					return "Bool";
@@ -664,13 +664,13 @@ const char* args_analyse_tools::aat_get_type() const
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_has_default
+  函数名称：args_analyse_tools::AAT_has_default
   功    能：判断本参数是否有缺省值（决定报错信息里要不要打印"缺省:..."）
   输入参数：无
   返 回 值：1 - 有缺省值；0 - 没有
   说    明：
  ***************************************************************************/
-const int args_analyse_tools::aat_has_default() const
+const int args_analyse_tools::AAT_has_default() const
 {
 	switch (this->extargs_type) {
 	case ST_EXTARGS_TYPE::int_with_default:
@@ -688,13 +688,13 @@ const int args_analyse_tools::aat_has_default() const
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_get_val
+  函数名称：args_analyse_tools::AAT_get_val
   功    能：返回本参数当前值的显示文本，用于打印参数表的"值"列
   输入参数：无
   返 回 值：参数出现时为实际值，未出现时为 "/"
   说    明：
  ***************************************************************************/
-const string args_analyse_tools::aat_get_val() const
+const string args_analyse_tools::AAT_get_val() const
 {
 	if (!this->existed()) {
 		return "/";
@@ -706,38 +706,38 @@ const string args_analyse_tools::aat_get_val() const
 		case ST_EXTARGS_TYPE::int_with_error:
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
-			return aat_int_to_string(this->extargs_int_value);
+			return AAT_int_to_string(this->extargs_int_value);
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
-			return aat_double_to_string(this->extargs_double_value);
+			return AAT_double_to_string(this->extargs_double_value);
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
-			return aat_ipaddr_to_string(this->extargs_ipaddr_value);
+			return AAT_ipaddr_to_string(this->extargs_ipaddr_value);
 		default:
 			return this->extargs_string_value;
 	}
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_get_default
+  函数名称：args_analyse_tools::AAT_get_default
   功    能：返回缺省值的显示文本，用于打印参数表的"缺省"列
   输入参数：无
   返 回 值：有缺省值时返回缺省值，否则返回 "/"
   说    明：
  ***************************************************************************/
-const string args_analyse_tools::aat_get_default() const
+const string args_analyse_tools::AAT_get_default() const
 {
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
 			return this->extargs_bool_default ? "true" : "false";
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_set_default:
-			return aat_int_to_string(this->extargs_int_default);
+			return AAT_int_to_string(this->extargs_int_default);
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_set_default:
-			return aat_double_to_string(this->extargs_double_default);
+			return AAT_double_to_string(this->extargs_double_default);
 		case ST_EXTARGS_TYPE::str:
 		case ST_EXTARGS_TYPE::str_with_set_default:
 			return this->extargs_string_default.empty() ? string("/") : this->extargs_string_default;
@@ -745,50 +745,50 @@ const string args_analyse_tools::aat_get_default() const
 			if (this->extargs_ipaddr_default == 0) {
 				return "/";
 			}
-			return aat_ipaddr_to_string(this->extargs_ipaddr_default);
+			return AAT_ipaddr_to_string(this->extargs_ipaddr_default);
 		default:
 			return "/";
 	}
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_get_range
+  函数名称：args_analyse_tools::AAT_get_range
   功    能：返回取值范围/可选集合的显示文本，用于打印参数表的最后一列
   输入参数：无
   返 回 值：范围 "[a..b]"、集合 "a/b/c"，没有限制时返回 "/"
   说    明：
  ***************************************************************************/
-const string args_analyse_tools::aat_get_range() const
+const string args_analyse_tools::AAT_get_range() const
 {
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
-			return "[" + aat_int_to_string(this->extargs_int_min) + ".." + aat_int_to_string(this->extargs_int_max) + "]";
+			return "[" + AAT_int_to_string(this->extargs_int_min) + ".." + AAT_int_to_string(this->extargs_int_max) + "]";
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
-			return aat_int_set_to_string(this->extargs_int_set);
+			return AAT_int_set_to_string(this->extargs_int_set);
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
-			return "[" + aat_double_to_string(this->extargs_double_min) + ".." + aat_double_to_string(this->extargs_double_max) + "]";
+			return "[" + AAT_double_to_string(this->extargs_double_min) + ".." + AAT_double_to_string(this->extargs_double_max) + "]";
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
-			return aat_double_set_to_string(this->extargs_double_set);
+			return AAT_double_set_to_string(this->extargs_double_set);
 		case ST_EXTARGS_TYPE::str_with_set_default:
 		case ST_EXTARGS_TYPE::str_with_set_error:
-			return aat_string_set_to_string(this->extargs_string_set);
+			return AAT_string_set_to_string(this->extargs_string_set);
 		default:
 			return "/";
 	}
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_get_info
+  函数名称：args_analyse_tools::AAT_get_info
   功    能：生成报错信息里 "(类型:..., ... 缺省:...)" 这一段
   输入参数：无
   返 回 值：形如 "(类型:int, 范围[0..65535] 缺省:12345)" 的字符串
   说    明：
  ***************************************************************************/
-const string args_analyse_tools::aat_get_info() const
+const string args_analyse_tools::AAT_get_info() const
 {
 	string result = "(";
 	switch (this->extargs_type) {
@@ -797,28 +797,28 @@ const string args_analyse_tools::aat_get_info() const
 			break;
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
-			result += "类型:int, 范围[" + aat_int_to_string(this->extargs_int_min) + ".."
-				+ aat_int_to_string(this->extargs_int_max) + "]";
+			result += "类型:int, 范围[" + AAT_int_to_string(this->extargs_int_min) + ".."
+				+ AAT_int_to_string(this->extargs_int_max) + "]";
 			break;
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
-			result += "类型:int, 可取值[" + aat_int_set_to_string(this->extargs_int_set) + "]";
+			result += "类型:int, 可取值[" + AAT_int_set_to_string(this->extargs_int_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
-			result += "类型:double, 范围[" + aat_general_to_string(this->extargs_double_min) + ".."
-				+ aat_general_to_string(this->extargs_double_max) + "]";
+			result += "类型:double, 范围[" + AAT_general_to_string(this->extargs_double_min) + ".."
+				+ AAT_general_to_string(this->extargs_double_max) + "]";
 			break;
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
-			result += "类型:double, 可取值[" + aat_double_set_to_general_string(this->extargs_double_set) + "]";
+			result += "类型:double, 可取值[" + AAT_double_set_to_general_string(this->extargs_double_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::str:
 			result += "类型:string";
 			break;
 		case ST_EXTARGS_TYPE::str_with_set_default:
 		case ST_EXTARGS_TYPE::str_with_set_error:
-			result += "类型:string, 可取值[" + aat_string_set_to_string(this->extargs_string_set) + "]";
+			result += "类型:string, 可取值[" + AAT_string_set_to_string(this->extargs_string_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
@@ -828,15 +828,15 @@ const string args_analyse_tools::aat_get_info() const
 			result += "类型:undefined";
 			break;
 	}
-	if (this->aat_has_default()) {
+	if (this->AAT_has_default()) {
 		switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_set_default:
-			result += " 缺省:" + aat_int_to_string(this->extargs_int_default);
+			result += " 缺省:" + AAT_int_to_string(this->extargs_int_default);
 			break;
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_set_default:
-			result += " 缺省:" + aat_general_to_string(this->extargs_double_default);
+			result += " 缺省:" + AAT_general_to_string(this->extargs_double_default);
 			break;
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 			result += " 缺省:" + this->extargs_string_default;
@@ -851,27 +851,27 @@ const string args_analyse_tools::aat_get_info() const
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_switch_value
+  函数名称：args_analyse_tools::AAT_switch_value
   功    能：解析并校验一个附加参数，结果写进对应的 value 成员
   输入参数：str：命令行里紧跟在参数名后面的那个字符串
   返 回 值：0 - 成功；-1 - 失败（错误信息已在本函数内打印）
   说    明：
  ***************************************************************************/
-int args_analyse_tools::aat_switch_value(const char* const str)
+int args_analyse_tools::AAT_switch_value(const char* const str)
 {
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
 		{
 			int value = 0;
-			if (aat_str_to_int(str, value)) {
-				cout << "参数[" << this->args_name << "]的附加参数不是整数. " << this->aat_get_info() << endl;
+			if (AAT_str_to_int(str, value)) {
+				cout << "参数[" << this->args_name << "]的附加参数不是整数. " << this->AAT_get_info() << endl;
 				return -1;
 			}
 			if (value < this->extargs_int_min || value > this->extargs_int_max) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::int_with_error) {
-					cout << "参数[" << this->args_name << "]的附加参数值(" << aat_int_to_string(value)
-						<< ")非法. " << this->aat_get_info() << endl;
+					cout << "参数[" << this->args_name << "]的附加参数值(" << AAT_int_to_string(value)
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				value = this->extargs_int_default;
@@ -883,14 +883,14 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 		case ST_EXTARGS_TYPE::int_with_set_error:
 		{
 			int value = 0;
-			if (aat_str_to_int(str, value)) {
-				cout << "参数[" << this->args_name << "]的附加参数不是整数. " << this->aat_get_info() << endl;
+			if (AAT_str_to_int(str, value)) {
+				cout << "参数[" << this->args_name << "]的附加参数不是整数. " << this->AAT_get_info() << endl;
 				return -1;
 			}
-			if (!aat_in_set(this->extargs_int_set, INVALID_INT_VALUE_OF_SET, value)) {
+			if (!AAT_in_set(this->extargs_int_set, INVALID_INT_VALUE_OF_SET, value)) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::int_with_set_error) {
-					cout << "参数[" << this->args_name << "]的附加参数值(" << aat_int_to_string(value)
-						<< ")非法. " << this->aat_get_info() << endl;
+					cout << "参数[" << this->args_name << "]的附加参数值(" << AAT_int_to_string(value)
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				value = this->extargs_int_default;
@@ -902,14 +902,14 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 		case ST_EXTARGS_TYPE::double_with_error:
 		{
 			double value = 0.0;
-			if (aat_str_to_double(str, value)) {
-				cout << "参数[" << this->args_name << "]的附加参数不是浮点数. " << this->aat_get_info() << endl;
+			if (AAT_str_to_double(str, value)) {
+				cout << "参数[" << this->args_name << "]的附加参数不是浮点数. " << this->AAT_get_info() << endl;
 				return -1;
 			}
 			if (value < this->extargs_double_min - DOUBLE_DELTA || value > this->extargs_double_max + DOUBLE_DELTA) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::double_with_error) {
-					cout << "参数[" << this->args_name << "]的附加参数值(" << aat_general_to_string(value)
-						<< ")非法. " << this->aat_get_info() << endl;
+					cout << "参数[" << this->args_name << "]的附加参数值(" << AAT_general_to_string(value)
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				value = this->extargs_double_default;
@@ -921,14 +921,14 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 		case ST_EXTARGS_TYPE::double_with_set_error:
 		{
 			double value = 0.0;
-			if (aat_str_to_double(str, value)) {
-				cout << "参数[" << this->args_name << "]的附加参数不是浮点数. " << this->aat_get_info() << endl;
+			if (AAT_str_to_double(str, value)) {
+				cout << "参数[" << this->args_name << "]的附加参数不是浮点数. " << this->AAT_get_info() << endl;
 				return -1;
 			}
-			if (!aat_in_set(this->extargs_double_set, INVALID_DOUBLE_VALUE_OF_SET, value)) {
+			if (!AAT_in_set(this->extargs_double_set, INVALID_DOUBLE_VALUE_OF_SET, value)) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::double_with_set_error) {
-					cout << "参数[" << this->args_name << "]的附加参数值(" << aat_general_to_string(value)
-						<< ")非法. " << this->aat_get_info() << endl;
+					cout << "参数[" << this->args_name << "]的附加参数值(" << AAT_general_to_string(value)
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				value = this->extargs_double_default;
@@ -943,10 +943,10 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 		case ST_EXTARGS_TYPE::str_with_set_error:
 		{
 			const string value = (str != NULL) ? string(str) : string("");
-			if (!aat_in_set(this->extargs_string_set, string(""), value)) {
+			if (!AAT_in_set(this->extargs_string_set, string(""), value)) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::str_with_set_error) {
 					cout << "参数[" << this->args_name << "]的附加参数值(" << value
-						<< ")非法. " << this->aat_get_info() << endl;
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				this->extargs_string_value = this->extargs_string_default;
@@ -959,10 +959,10 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
 		{
 			u_int value = 0;
-			if (!aat_str_to_ipaddr(str, value)) {
+			if (!AAT_str_to_ipaddr(str, value)) {
 				if (this->extargs_type == ST_EXTARGS_TYPE::ipaddr_with_error) {
 						cout << "参数[" << this->args_name << "]的附加参数值(" << ((str != NULL) ? str : "")
-						<< ")非法. " << this->aat_get_info() << endl;
+						<< ")非法. " << this->AAT_get_info() << endl;
 					return -1;
 				}
 				value = this->extargs_ipaddr_default;
@@ -977,21 +977,21 @@ int args_analyse_tools::aat_switch_value(const char* const str)
 }
 
 /***************************************************************************
-  函数名称：args_analyse_tools::aat_print
+  函数名称：args_analyse_tools::AAT_print
   功    能：按给定列宽打印本参数的一行
   输入参数：width_name    ：参数名列宽
   返 回 值：0
   说    明：
  ***************************************************************************/
-int args_analyse_tools::aat_print(const int width_name, const int width_type, const int width_default,
+int args_analyse_tools::AAT_print(const int width_name, const int width_type, const int width_default,
 	const int width_exists, const int width_value) const
 {
 	cout << ' ' << setw(width_name) << this->args_name
-		<< ' ' << setw(width_type) << this->aat_get_type()
-		<< ' ' << setw(width_default) << this->aat_get_default()
+		<< ' ' << setw(width_type) << this->AAT_get_type()
+		<< ' ' << setw(width_default) << this->AAT_get_default()
 		<< ' ' << setw(width_exists) << this->existed()
-		<< ' ' << setw(width_value) << this->aat_get_val()
-		<< ' ' << this->aat_get_range() << endl;
+		<< ' ' << setw(width_value) << this->AAT_get_val()
+		<< ' ' << this->AAT_get_range() << endl;
 	return 0;
 }
 
@@ -1010,7 +1010,7 @@ int args_analyse_process(const int argc, const char* const *const argv, args_ana
 	int i = 1;
 	for (; i < argc; i++) {
 		const char* const token = argv[i];
-		if (!aat_is_option(token)) {
+		if (!AAT_is_option(token)) {
 			if (follow_up_args) {
 				return i;
 			}
@@ -1035,15 +1035,15 @@ int args_analyse_process(const int argc, const char* const *const argv, args_ana
 		}
 		if (cur.extargs_num > 0) {
 			if (i + 1 >= argc) {
-				cout << "参数[" << token << "]的附加参数不足. " << cur.aat_get_info() << endl;
+				cout << "参数[" << token << "]的附加参数不足. " << cur.AAT_get_info() << endl;
 				return -1;
 			}
 			const char* const pvalue = argv[i + 1];
-			if (aat_is_option(pvalue)) {
-				cout << "参数[" << token << "]缺少附加参数. " << cur.aat_get_info() << endl;
+			if (AAT_is_option(pvalue)) {
+				cout << "参数[" << token << "]缺少附加参数. " << cur.AAT_get_info() << endl;
 				return -1;
 			}
-			if (cur.aat_switch_value(pvalue) < 0) {
+			if (cur.AAT_switch_value(pvalue) < 0) {
 				return -1;
 			}
 			i++;
@@ -1074,10 +1074,10 @@ int args_analyse_print(const args_analyse_tools* const args)
 
 	for (int k = 0; args[k].extargs_type != ST_EXTARGS_TYPE::null; k++) {
 		const int name_len = (int)args[k].args_name.length();
-		const int type_len = (int)strlen(args[k].aat_get_type());
-		const int default_len = (int)args[k].aat_get_default().length();
-		const int value_len = (int)args[k].aat_get_val().length();
-		const int range_len = (int)args[k].aat_get_range().length();
+		const int type_len = (int)strlen(args[k].AAT_get_type());
+		const int default_len = (int)args[k].AAT_get_default().length();
+		const int value_len = (int)args[k].AAT_get_val().length();
+		const int range_len = (int)args[k].AAT_get_range().length();
 		if (name_len > width_name)		width_name = name_len;
 		if (type_len > width_type)		width_type = type_len;
 		if (default_len > width_default)	width_default = default_len;
@@ -1108,7 +1108,7 @@ int args_analyse_print(const args_analyse_tools* const args)
 	cout << endl;
 
 	for (int k = 0; args[k].extargs_type != ST_EXTARGS_TYPE::null; k++) {
-		args[k].aat_print(width_name, width_type, width_default, width_exists, width_value);
+		args[k].AAT_print(width_name, width_type, width_default, width_exists, width_value);
 	}
 
 	for (int n = 0; n < total_width; n++) {
