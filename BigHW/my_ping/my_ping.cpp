@@ -23,10 +23,10 @@ enum OPT_ARGS {
 /* 允许自行添加其它函数，也可以将自定义函数放在其它cpp中 */
 
 /***************************************************************************
-  函数名称：
-  功    能：
-  输入参数：
-  返 回 值：
+  函数名称：usage
+  功    能：打印命令行用法和示例
+  输入参数：fullpath_procname：程序完整路径
+  返 回 值：无
   说    明：想一想，为什么要加 static（虽然只有一个cpp，但这是工程习惯）
 ***************************************************************************/
 static void usage(const char* const fullpath_procname)
@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
 		args_analyse_tools("--l",    ST_EXTARGS_TYPE::int_with_default, 1, 64, 32, 64000), //[32..64000]，默认64
 		args_analyse_tools("--ip",   ST_EXTARGS_TYPE::ipaddr_with_error,1, string("")),
 		args_analyse_tools()  //最后一个，用于结束
-};
+	};
 
 	/* 不带任何参数做特殊处理，打印提示信息后结束 */
 	if (argc == 1) {

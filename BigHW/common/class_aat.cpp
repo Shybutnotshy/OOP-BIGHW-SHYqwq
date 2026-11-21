@@ -16,13 +16,13 @@ using namespace std;
 	 允许加入其它需要static函数（内部工具用）
    ---------------------------------------------------------------- */
 
-   /***************************************************************************
-	 函数名称：AAT_is_option
-	 功    能：判断一个命令行参数是不是 "--" 开头的有效可变参数名称
-	 输入参数：str：待判断的字符串
-	 返 回 值：true - 是可变参数；false - 不是（固定参数、"-x"、"--"、空串等）
-	 说    明：
-	***************************************************************************/
+/***************************************************************************
+  函数名称：AAT_is_option
+  功    能：判断一个命令行参数是不是 "--" 开头的有效可变参数名称
+  输入参数：str：待判断的字符串
+  返 回 值：true - 是可变参数；false - 不是（固定参数、"-x"、"--"、空串等）
+  说    明：
+ ***************************************************************************/
 static bool AAT_is_option(const char* const str)
 {
 	if (str == NULL) {
@@ -37,7 +37,7 @@ static bool AAT_is_option(const char* const str)
 /***************************************************************************
   函数名称：AAT_str_to_int
   功    能：把字符串解析成 int，用于 int 型附加参数
-  输入参数：str   ：待解析的字符串（可带一个 '+' / '-' 号，其余必须全是数字）
+  输入参数：str：待解析的字符串（可带一个 '+' / '-' 号，其余必须全是数字）
   返 回 值：0 - 成功，value 带回结果；-1 - 不是合法的整数写法
   说    明：
  ***************************************************************************/
@@ -84,7 +84,7 @@ static int AAT_str_to_int(const char* const str, int& value)
 /***************************************************************************
   函数名称：AAT_str_to_double
   功    能：把字符串解析成 double，用于 double 型附加参数
-  输入参数：str   ：待解析的字符串（可带一个 '+' / '-' 号，最多一个小数点，其余全是数字）
+  输入参数：str：待解析的字符串（可带一个 '+' / '-' 号，最多一个小数点，其余全是数字）
   返 回 值：0 - 成功，value 带回结果；-1 - 不是合法的浮点数写法
   说    明：
  ***************************************************************************/
@@ -122,7 +122,7 @@ static int AAT_str_to_double(const char* const str, double& value)
 /***************************************************************************
   函数名称：AAT_str_to_ipaddr
   功    能：把 "127.0.0.1" 形式的字符串解析成 u_int32 型的 0x7f000001
-  输入参数：str   ：待解析的字符串
+  输入参数：str：待解析的字符串
   返 回 值：true - 成功，value 带回结果；false - 不是合法的点分十进制 IP 地址
   说    明：
  ***************************************************************************/
@@ -230,40 +230,40 @@ struct AAT_set_traits<double> {
 
 /***************************************************************************
   函数名称：AAT_set_count
-  功    能：统计以 sentinel 结尾的集合元素个数
-  输入参数：set     ：集合首地址，以 sentinel 结尾
-			sentinel：集合结束标志（int 用 INVALID_INT_VALUE_OF_SET，
-					  double 用 INVALID_DOUBLE_VALUE_OF_SET，string 用空串）
+  功    能：统计以 end_element 结尾的集合元素个数
+  输入参数：set        ：集合首地址，以 end_element 结尾
+			end_element：集合结束标志（int 用 INVALID_INT_VALUE_OF_SET，
+			             double 用 INVALID_DOUBLE_VALUE_OF_SET，string 用空串）
   返 回 值：元素个数（set 为 NULL 时返回 0）
   说    明：
  ***************************************************************************/
 template <typename T>
-static int AAT_set_count(const T* const set, const T& sentinel)
+static int AAT_set_count(const T* const set, const T& end_element)
 {
-	int count = 0;
+	int cnt = 0;
 	if (set == NULL) {
 		return 0;
 	}
-	while (!(set[count] == sentinel)) {
-		count++;
+	while (!(set[cnt] == end_element)) {
+		cnt++;
 	}
-	return count;
+	return cnt;
 }
 
 /***************************************************************************
   函数名称：AAT_in_set
   功    能：判断一个值是否属于集合
-  输入参数：set     ：集合首地址，以 sentinel 结尾
-			sentinel：集合结束标志
+  输入参数：set     ：集合首地址，以 end_element 结尾
+			end_element：集合结束标志
 			value   ：待判断的值
   返 回 值：true - 在集合中；false - 不在
   说    明：
  ***************************************************************************/
 template <typename T>
-static bool AAT_in_set(const T* const set, const T& sentinel, const T& value)
+static bool AAT_in_set(const T* const set, const T& end_element, const T& value)
 {
-	const int count = AAT_set_count(set, sentinel);
-	for (int i = 0; i < count; i++) {
+	const int cnt = AAT_set_count(set, end_element);
+	for (int i = 0; i < cnt; i++) {
 		if (AAT_set_traits<T>::equal(set[i], value)) {
 			return true;
 		}
@@ -280,15 +280,15 @@ static bool AAT_in_set(const T* const set, const T& sentinel, const T& value)
  ***************************************************************************/
 static string AAT_int_set_to_string(const int* const set)
 {
-	const int count = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
-	string result;
-	for (int i = 0; i < count; i++) {
+	const int cnt = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
+	string ret;
+	for (int i = 0; i < cnt; i++) {
 		if (i > 0) {
-			result += '/';
+			ret += '/';
 		}
-		result += AAT_int_to_string(set[i]);
+		ret += AAT_int_to_string(set[i]);
 	}
-	return result;
+	return ret;
 }
 
 /***************************************************************************
@@ -300,15 +300,15 @@ static string AAT_int_set_to_string(const int* const set)
  ***************************************************************************/
 static string AAT_double_set_to_string(const double* const set)
 {
-	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
-	string result;
-	for (int i = 0; i < count; i++) {
+	const int cnt = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	string ret;
+	for (int i = 0; i < cnt; i++) {
 		if (i > 0) {
-			result += '/';
+			ret += '/';
 		}
-		result += AAT_double_to_string(set[i]);
+		ret += AAT_double_to_string(set[i]);
 	}
-	return result;
+	return ret;
 }
 
 /***************************************************************************
@@ -320,15 +320,15 @@ static string AAT_double_set_to_string(const double* const set)
  ***************************************************************************/
 static string AAT_double_set_to_general_string(const double* const set)
 {
-	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
-	string result;
-	for (int i = 0; i < count; i++) {
+	const int cnt = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	string ret;
+	for (int i = 0; i < cnt; i++) {
 		if (i > 0) {
-			result += '/';
+			ret += '/';
 		}
-		result += AAT_general_to_string(set[i]);
+		ret += AAT_general_to_string(set[i]);
 	}
-	return result;
+	return ret;
 }
 
 /***************************************************************************
@@ -340,22 +340,22 @@ static string AAT_double_set_to_general_string(const double* const set)
  ***************************************************************************/
 static string AAT_string_set_to_string(const string* const set)
 {
-	const int count = AAT_set_count(set, string(""));
-	string result;
-	for (int i = 0; i < count; i++) {
+	const int cnt = AAT_set_count(set, string(""));
+	string ret;
+	for (int i = 0; i < cnt; i++) {
 		if (i > 0) {
-			result += '/';
+			ret += '/';
 		}
-		result += set[i];
+		ret += set[i];
 	}
-	return result;
+	return ret;
 }
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：把所有成员初始化为空值
+  输入参数：无
+  返 回 值：无
   说    明：null
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools()
@@ -390,9 +390,9 @@ args_analyse_tools::args_analyse_tools()
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数和 bool 缺省值构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def：bool 缺省值
+  返 回 值：无
   说    明：boolean
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE type, const int ext_num, const bool def)
@@ -406,9 +406,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数、int 缺省值和范围构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def：缺省值；_min：最小值；_max：最大值
+  返 回 值：无
   说    明：int_with_default、int_with_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE type, const int ext_num, const int def, const int _min, const int _max)
@@ -425,9 +425,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数、int 集合和缺省下标构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def_of_set_pos：缺省值在集合中的下标；set：集合首地址
+  返 回 值：无
   说    明：int_with_set_default、int_with_set_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_TYPE type, const int ext_num, const int def_of_set_pos, const int* const set)
@@ -438,8 +438,8 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 	this->extargs_num = ext_num;
 	this->extargs_int_set = const_cast<int*>(set);
 	int default_value = 0;
-	const int count = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
-	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
+	const int cnt = AAT_set_count(set, INVALID_INT_VALUE_OF_SET);
+	if (def_of_set_pos >= 0 && def_of_set_pos < cnt) {
 		default_value = set[def_of_set_pos];
 	}
 	this->extargs_int_default = default_value;
@@ -448,9 +448,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数和字符串缺省值构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def：字符串缺省值
+  返 回 值：无
   说    明：str、ipaddr_with_default、ipaddr_with_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE type, const int ext_num, const string def)
@@ -473,9 +473,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数、string 集合和缺省下标构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def_of_set_pos：缺省值在集合中的下标；set：集合首地址
+  返 回 值：无
   说    明：str_with_set_default、str_with_set_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE type, const int ext_num, const int def_of_set_pos, const string* const set)
@@ -486,8 +486,8 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 	this->extargs_num = ext_num;
 	this->extargs_string_set = const_cast<string*>(set);
 	string default_value = "";
-	const int count = AAT_set_count(set, string(""));
-	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
+	const int cnt = AAT_set_count(set, string(""));
+	if (def_of_set_pos >= 0 && def_of_set_pos < cnt) {
 		default_value = set[def_of_set_pos];
 	}
 	this->extargs_string_default = default_value;
@@ -496,9 +496,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数、double 缺省值和范围构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def：缺省值；_min：最小值；_max：最大值
+  返 回 值：无
   说    明：double_with_default、double_with_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE type, const int ext_num, const double	def, const double _min, const double _max)
@@ -515,9 +515,9 @@ args_analyse_tools::args_analyse_tools(const char* name, const ST_EXTARGS_TYPE t
 
 /***************************************************************************
   函数名称：args_analyse_tools::args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：用参数名、类型、附加参数个数、double 集合和缺省下标构造
+  输入参数：name：参数名；type：参数类型；ext_num：附加参数个数；def_of_set_pos：缺省值在集合中的下标；set：集合首地址
+  返 回 值：无
   说    明：double_with_set_default、double_with_set_error
  ***************************************************************************/
 args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_TYPE type, const int ext_num, const int def_of_set_pos, const double* const set)
@@ -528,8 +528,8 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 	this->extargs_num = ext_num;
 	this->extargs_double_set = const_cast<double*>(set);
 	double default_value = 0.0;
-	const int count = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
-	if (def_of_set_pos >= 0 && def_of_set_pos < count) {
+	const int cnt = AAT_set_count(set, INVALID_DOUBLE_VALUE_OF_SET);
+	if (def_of_set_pos >= 0 && def_of_set_pos < cnt) {
 		default_value = set[def_of_set_pos];
 	}
 	this->extargs_double_default = default_value;
@@ -538,25 +538,26 @@ args_analyse_tools::args_analyse_tools(const char* name, const enum ST_EXTARGS_T
 
 /***************************************************************************
   函数名称：args_analyse_tools::~args_analyse_tools
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：销毁参数分析项
+  输入参数：无
+  返 回 值：无
   说    明：
  ***************************************************************************/
 args_analyse_tools::~args_analyse_tools()
-{ }
+{
+}
 
 /* ---------------------------------------------------------------
 	 允许AAT中自定义成员函数的实现（private）
    ---------------------------------------------------------------- */
 
-   /***************************************************************************
-	 函数名称：args_analyse_tools::get_name
-	 功    能：
-	 输入参数：
-	 返 回 值：
-	 说    明：已实现，不要动
-	***************************************************************************/
+/***************************************************************************
+  函数名称：args_analyse_tools::get_name
+  功    能：
+  输入参数：
+  返 回 值：
+  说    明：已实现，不要动
+ ***************************************************************************/
 const string args_analyse_tools::get_name() const
 {
 	return this->args_name;
@@ -624,10 +625,10 @@ const unsigned int args_analyse_tools::get_ipaddr() const
 
 /***************************************************************************
   函数名称：args_analyse_tools::get_str_ipaddr
-  功    能：
-  输入参数：
-  返 回 值：
-  说    明：将 extargs_ipaddr_value 的值从 0x7f000001 转为 "127.0.0.1"
+  功    能：把 IP 地址从 u_int32 形式转成点分十进制字符串
+  输入参数：无
+  返 回 值：点分十进制字符串
+  说    明：
  ***************************************************************************/
 const string args_analyse_tools::get_str_ipaddr() const
 {
@@ -644,35 +645,35 @@ const string args_analyse_tools::get_str_ipaddr() const
 const char* args_analyse_tools::AAT_get_type() const
 {
 	switch (this->extargs_type) {
-		case ST_EXTARGS_TYPE::boolean:					
+		case ST_EXTARGS_TYPE::boolean:
 			return "Bool";
-		case ST_EXTARGS_TYPE::int_with_default:			
+		case ST_EXTARGS_TYPE::int_with_default:
 			return "IntWithDefault";
-		case ST_EXTARGS_TYPE::int_with_error:			
+		case ST_EXTARGS_TYPE::int_with_error:
 			return "IntWithError";
-		case ST_EXTARGS_TYPE::int_with_set_default:		
+		case ST_EXTARGS_TYPE::int_with_set_default:
 			return "IntSETWithDefault";
-		case ST_EXTARGS_TYPE::int_with_set_error:		
+		case ST_EXTARGS_TYPE::int_with_set_error:
 			return "IntSETWithError";
-		case ST_EXTARGS_TYPE::double_with_default:		
+		case ST_EXTARGS_TYPE::double_with_default:
 			return "DoubleWithDefault";
-		case ST_EXTARGS_TYPE::double_with_error:		
+		case ST_EXTARGS_TYPE::double_with_error:
 			return "DoubleWithError";
-		case ST_EXTARGS_TYPE::double_with_set_default:	
+		case ST_EXTARGS_TYPE::double_with_set_default:
 			return "DoubleSETWithDefault";
-		case ST_EXTARGS_TYPE::double_with_set_error:	
+		case ST_EXTARGS_TYPE::double_with_set_error:
 			return "DoubleSETWithError";
-		case ST_EXTARGS_TYPE::str:						
+		case ST_EXTARGS_TYPE::str:
 			return "String";
-		case ST_EXTARGS_TYPE::str_with_set_default:		
+		case ST_EXTARGS_TYPE::str_with_set_default:
 			return "StringSETWithDefault";
-		case ST_EXTARGS_TYPE::str_with_set_error:		
+		case ST_EXTARGS_TYPE::str_with_set_error:
 			return "StringSETWithError";
-		case ST_EXTARGS_TYPE::ipaddr_with_default:		
+		case ST_EXTARGS_TYPE::ipaddr_with_default:
 			return "IPAddrWithDefault";
-		case ST_EXTARGS_TYPE::ipaddr_with_error:		
+		case ST_EXTARGS_TYPE::ipaddr_with_error:
 			return "IPAddrWithError";
-		default:										
+		default:
 			return "Undefined";
 	}
 }
@@ -692,12 +693,10 @@ const int args_analyse_tools::AAT_has_default() const
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 			return 1;
-
 		case ST_EXTARGS_TYPE::str:
 		case ST_EXTARGS_TYPE::str_with_set_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 			return !this->extargs_string_default.empty();
-
 		default:
 			return 0;
 	}
@@ -718,23 +717,19 @@ const string args_analyse_tools::AAT_get_val() const
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
 			return "true";
-
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
 			return AAT_int_to_string(this->extargs_int_value);
-
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
 			return AAT_double_to_string(this->extargs_double_value);
-
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
 			return AAT_ipaddr_to_string(this->extargs_ipaddr_value);
-
 		default:
 			return this->extargs_string_value;
 	}
@@ -752,25 +747,20 @@ const string args_analyse_tools::AAT_get_default() const
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
 			return this->extargs_bool_default ? "true" : "false";
-
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_set_default:
 			return AAT_int_to_string(this->extargs_int_default);
-
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_set_default:
 			return AAT_double_to_string(this->extargs_double_default);
-
 		case ST_EXTARGS_TYPE::str:
 		case ST_EXTARGS_TYPE::str_with_set_default:
 			return this->extargs_string_default.empty() ? string("/") : this->extargs_string_default;
-
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 			if (this->extargs_ipaddr_default == 0) {
 				return "/";
 			}
 			return AAT_ipaddr_to_string(this->extargs_ipaddr_default);
-
 		default:
 			return "/";
 	}
@@ -815,64 +805,64 @@ const string args_analyse_tools::AAT_get_range() const
  ***************************************************************************/
 const string args_analyse_tools::AAT_get_info() const
 {
-	string result = "(";
+	string ret = "(";
 	switch (this->extargs_type) {
 		case ST_EXTARGS_TYPE::boolean:
-			result += "类型:bool";
+			ret += "类型:bool";
 			break;
 		case ST_EXTARGS_TYPE::int_with_default:
 		case ST_EXTARGS_TYPE::int_with_error:
-			result += "类型:int, 范围[" + AAT_int_to_string(this->extargs_int_min) + ".."
+			ret += "类型:int, 范围[" + AAT_int_to_string(this->extargs_int_min) + ".."
 				+ AAT_int_to_string(this->extargs_int_max) + "]";
 			break;
 		case ST_EXTARGS_TYPE::int_with_set_default:
 		case ST_EXTARGS_TYPE::int_with_set_error:
-			result += "类型:int, 可取值[" + AAT_int_set_to_string(this->extargs_int_set) + "]";
+			ret += "类型:int, 可取值[" + AAT_int_set_to_string(this->extargs_int_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::double_with_default:
 		case ST_EXTARGS_TYPE::double_with_error:
-			result += "类型:double, 范围[" + AAT_general_to_string(this->extargs_double_min) + ".."
+			ret += "类型:double, 范围[" + AAT_general_to_string(this->extargs_double_min) + ".."
 				+ AAT_general_to_string(this->extargs_double_max) + "]";
 			break;
 		case ST_EXTARGS_TYPE::double_with_set_default:
 		case ST_EXTARGS_TYPE::double_with_set_error:
-			result += "类型:double, 可取值[" + AAT_double_set_to_general_string(this->extargs_double_set) + "]";
+			ret += "类型:double, 可取值[" + AAT_double_set_to_general_string(this->extargs_double_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::str:
-			result += "类型:string";
+			ret += "类型:string";
 			break;
 		case ST_EXTARGS_TYPE::str_with_set_default:
 		case ST_EXTARGS_TYPE::str_with_set_error:
-			result += "类型:string, 可取值[" + AAT_string_set_to_string(this->extargs_string_set) + "]";
+			ret += "类型:string, 可取值[" + AAT_string_set_to_string(this->extargs_string_set) + "]";
 			break;
 		case ST_EXTARGS_TYPE::ipaddr_with_default:
 		case ST_EXTARGS_TYPE::ipaddr_with_error:
-			result += "类型:IP地址";
+			ret += "类型:IP地址";
 			break;
 		default:
-			result += "类型:undefined";
+			ret += "类型:undefined";
 			break;
 	}
 	if (this->AAT_has_default()) {
 		switch (this->extargs_type) {
 			case ST_EXTARGS_TYPE::int_with_default:
 			case ST_EXTARGS_TYPE::int_with_set_default:
-				result += " 缺省:" + AAT_int_to_string(this->extargs_int_default);
+				ret += " 缺省:" + AAT_int_to_string(this->extargs_int_default);
 				break;
 			case ST_EXTARGS_TYPE::double_with_default:
 			case ST_EXTARGS_TYPE::double_with_set_default:
-				result += " 缺省:" + AAT_general_to_string(this->extargs_double_default);
+				ret += " 缺省:" + AAT_general_to_string(this->extargs_double_default);
 				break;
 			case ST_EXTARGS_TYPE::ipaddr_with_default:
-				result += " 缺省:" + this->extargs_string_default;
+				ret += " 缺省:" + this->extargs_string_default;
 				break;
 			default:
-				result += " 缺省:" + this->extargs_string_default;
+				ret += " 缺省:" + this->extargs_string_default;
 				break;
 		}
 	}
-	result += ")";
-	return result;
+	ret += ")";
+	return ret;
 }
 
 /***************************************************************************
@@ -1022,9 +1012,9 @@ int args_analyse_tools::AAT_print(const int width_name, const int width_type, co
 
 /***************************************************************************
   函数名称：args_analyse_process
-  功    能：
-  输入参数：follow_up_args：是否有后续参数
-  返 回 值：
+  功    能：按参数表解析命令行，返回固定参数的起始下标
+  输入参数：argc：参数个数；argv：参数表；args：参数表定义；follow_up_args：是否还有固定参数
+  返 回 值：>=0 - 固定参数的起始下标；-1 - 解析失败
   说    明：友元函数
  ***************************************************************************/
 int args_analyse_process(const int argc, const char* const* const argv, args_analyse_tools* const args, const int follow_up_args)
@@ -1080,9 +1070,9 @@ int args_analyse_process(const int argc, const char* const* const argv, args_ana
 
 /***************************************************************************
   函数名称：args_analyse_print
-  功    能：
-  输入参数：
-  返 回 值：
+  功    能：按动态列宽打印所有参数的分析结果
+  输入参数：args：参数表定义
+  返 回 值：0 - 成功；-1 - 参数表为空
   说    明：友元函数
  ***************************************************************************/
 int args_analyse_print(const args_analyse_tools* const args)

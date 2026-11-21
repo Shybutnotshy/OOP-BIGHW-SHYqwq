@@ -88,7 +88,7 @@ private:
 	/* 下面这些是变量 */
 	int    args_existed;			//本参数是否出现过（防止相同参数 -n ** -n ** 重复出现）
 	int    extargs_int_value;		//int型额外参数读到的值
-	double extargs_double_value;		//int型额外参数读到的值
+	double extargs_double_value;		//double型额外参数读到的值
 	string extargs_string_value;		//string型额外参数读到的值
 	u_int  extargs_ipaddr_value;		//IP地址额外参数读到的值
 
@@ -139,17 +139,17 @@ public:
 	const u_int get_ipaddr() const;	//返回某设置项的值（IP地址，以"127.0.0.1"为例，返回u_int32型的 0x7f000001）
 	const string get_str_ipaddr() const;	//返回某设置项的值（IP地址，以"127.0.0.1"为例，返回字符串形式的"127.0.0.1"）
 
-    /* 对参数进行分析，返回0/-1 */
-	friend int args_analyse_process(const int argc, const char* const *const argv, args_analyse_tools* const args, const int follow_up_args);
+	/* 对参数进行分析，返回0/-1 */
+	friend int args_analyse_process(const int argc, const char* const* const argv, args_analyse_tools* const args, const int follow_up_args);
 	/* 打印分析后的结果 */
-	friend int args_analyse_print(const args_analyse_tools*const args);
+	friend int args_analyse_print(const args_analyse_tools* const args);
 
 	/* ---------------------------------------------------------------
 		 不允许加入其它需要的定义（对外不呈现）
 	   ---------------------------------------------------------------- */
 };
 
-int args_analyse_process(const int argc, const char* const *const argv, args_analyse_tools* const args, const int follow_up_args);
+int args_analyse_process(const int argc, const char* const* const argv, args_analyse_tools* const args, const int follow_up_args);
 int args_analyse_print(const args_analyse_tools* const args);
 
 #endif  // !ENABLE_LIB_COMMON_TOOLS
